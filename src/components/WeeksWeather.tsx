@@ -8,6 +8,7 @@ import { fetchFullInfoWeatherForOneDayThunk } from "@/store/slices/weathersBasic
 
 const WeeksWeather: FunctionComponent = () => {
     const {lat, lon} = useAppSelector(s=>s.fullInfoFurDay.coordinates)
+    const {date} = useAppSelector(s=>s.fullInfoFurDay.weather)
     const dispatch = useAppDispatch();
     const { weather } = useAppSelector((state) => state.weatherForWeek);
     useEffect(()=>{
@@ -20,7 +21,7 @@ const WeeksWeather: FunctionComponent = () => {
         <div className="w-full flex flex-col gap-5 pt-12">
             {weather.map((el)=>(
                 <div onClick={()=>{changeDayHandler({lt: lat, ln: lon, date: el.fullDate, hour: '14:00'})}} 
-                className="w-full p-3 rounded-xl border-2 border-amber-50 text-amber-50 flex items-center justify-between bg-black/5 hover:bg-black/30 transition-colors duration-300 cursor-pointer"
+                className={`w-full p-3 rounded-xl border-2  border-amber-50 text-amber-50 flex items-center justify-between ${el.fullDate === date ? 'bg-black/30' : 'bg-black/5'}  hover:bg-black/30 transition-colors duration-300 cursor-pointer`}
                  key={el.date} >
                     <div>{el.date}</div>
                     <div>{el.min}/{el.max}</div>
