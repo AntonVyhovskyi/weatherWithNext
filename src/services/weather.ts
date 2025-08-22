@@ -47,7 +47,7 @@ export async function searchCities(query: string): Promise<CityCoordinates[]> {
         return [];
     }
 
-    return res.data.results.map((city: any) => ({
+    return res.data.results.map((city: {name: string, country: string, latitude:number, longitude: number}) => ({
         name: city.name,
         country: city.country ? city.country : '',
         lat: city.latitude,
@@ -69,7 +69,7 @@ export async function getCurrentWeatherFull({
     hour,
 }: IWeatherOptions): Promise<IFullBasicInfoWeatherForOneDay> {
     // 1️⃣ Якщо hour заданий, беремо погодинний прогноз
-    let useHourly = !!hour;
+    const useHourly = !!hour;
 
     // Якщо погодинний прогноз, обов'язково потрібна дата
     if (useHourly && !date) {

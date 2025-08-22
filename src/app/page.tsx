@@ -27,7 +27,7 @@ export default function Home() {
         console.error("Cannot get location", err);
       }
     );
-  }, [])
+  }, [dispatch])
   
   return (
     <div className={` pb-10 min-h-screen ${is_day ? backgroundsConst[weathercode] : backgroundsNightConst[weathercode]}`}>

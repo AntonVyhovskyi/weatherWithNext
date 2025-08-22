@@ -4,17 +4,15 @@ import { FunctionComponent, useEffect } from "react";
 import WeatherIcon from "./WeatherIcon";
 import { fetchFullInfoWeatherForOneDayThunk } from "@/store/slices/weathersBasicInfo.slice";
 
-interface WeeksWeatherProps {
 
-}
 
-const WeeksWeather: FunctionComponent<WeeksWeatherProps> = () => {
+const WeeksWeather: FunctionComponent = () => {
     const {lat, lon} = useAppSelector(s=>s.fullInfoFurDay.coordinates)
     const dispatch = useAppDispatch();
-    const { weather, loading, error } = useAppSelector((state) => state.weatherForWeek);
+    const { weather } = useAppSelector((state) => state.weatherForWeek);
     useEffect(()=>{
         dispatch(fetchWeeksWeatherThunk({ lat, lon}))
-    },[lat, lon]) 
+    },[lat, lon, dispatch]) 
     const changeDayHandler = ({ lt, ln, date, hour }: { lt: number; ln: number; date: string; hour: string }) => {
         dispatch(fetchFullInfoWeatherForOneDayThunk({lat: lt, lon: ln, date, hour}))
     }

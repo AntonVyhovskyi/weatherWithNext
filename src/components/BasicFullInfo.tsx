@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/hooksForStores";
 import { fetchFullInfoWeatherForOneDayThunk } from "@/store/slices/weathersBasicInfo.slice";
-import { FunctionComponent, useEffect, useRef } from "react";
+import { FunctionComponent, useEffect } from "react";
 import WeatherIcon from "./WeatherIcon";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -9,11 +9,9 @@ import Skeleton from "react-loading-skeleton";
 import { WiStrongWind } from "react-icons/wi";
 import WeatherClothesAdvisor from "./WeatherClothesAdvisor";
 
-interface BasicFullInfoProps {
 
-}
 
-const BasicFullInfo: FunctionComponent<BasicFullInfoProps> = () => {
+const BasicFullInfo: FunctionComponent = () => {
 
     const {
         loading,
@@ -26,17 +24,16 @@ const BasicFullInfo: FunctionComponent<BasicFullInfoProps> = () => {
             temperature,
             wind,
             weathercode,
-            time,
+            
             date,
-            precipitation,
-            relativehumidity,
-            cloudcover,
+            
+            
             city,
             is_day
         }
     } = useAppSelector(s => s.fullInfoFurDay)
 
-    const fullinfo = useAppSelector(s => s.fullInfoFurDay)
+ 
     const dispatch = useAppDispatch()
 
 
@@ -44,11 +41,9 @@ const BasicFullInfo: FunctionComponent<BasicFullInfoProps> = () => {
         if (lat && lon) {
             dispatch(fetchFullInfoWeatherForOneDayThunk({ lat, lon }));
         }
-    }, [lat, lon]);
+    }, [lat, lon, dispatch]);
 
-    useEffect(() => {
-        console.log(fullinfo);
-    }, [fullinfo])
+ 
     if (loading) {
         return (
             <div className="text-white flex flex-col gap-3 items-center">

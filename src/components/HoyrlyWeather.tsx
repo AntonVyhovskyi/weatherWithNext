@@ -4,14 +4,12 @@ import { FunctionComponent, useEffect, useRef } from "react";
 import WeatherIcon from "./WeatherIcon";
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css';
-import { current } from "@reduxjs/toolkit";
-import { fetchFullInfoWeatherForOneDayThunk, setTimeFurBasicInfo } from "@/store/slices/weathersBasicInfo.slice";
 
-interface HourlyWeatherProps {
+import {  setTimeFurBasicInfo } from "@/store/slices/weathersBasicInfo.slice";
 
-}
 
-const HourlyWeather: FunctionComponent<HourlyWeatherProps> = () => {
+
+const HourlyWeather: FunctionComponent = () => {
     const { items, loading, error } = useAppSelector(s => s.hourlyWeather)
     const { coordinates: { lon, lat }, weather: { date, time } } = useAppSelector(s => s.fullInfoFurDay)
     const dispatch = useAppDispatch()
@@ -22,7 +20,7 @@ const HourlyWeather: FunctionComponent<HourlyWeatherProps> = () => {
         if (lon && lat && date) {
             dispatch(fetchHourlyWeatherThunk({ lat, lon, date }))
         }
-    }, [lon, lat, date])
+    }, [lon, lat, date, dispatch])
 
     useEffect(() => {
         if (currentHourRef.current) {

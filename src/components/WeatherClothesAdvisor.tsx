@@ -1,4 +1,4 @@
-import { FaTshirt, FaUmbrella, FaSnowflake, FaCloudRain, FaWind } from "react-icons/fa";
+import { FaTshirt, FaUmbrella, FaSnowflake, FaWind } from "react-icons/fa";
 import { GiWinterGloves } from "react-icons/gi";
 
 interface Props {
