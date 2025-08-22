@@ -6,7 +6,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 import { BiSolidMapPin } from "react-icons/bi";
 import Skeleton from "react-loading-skeleton";
-import { WiStrongWind} from "react-icons/wi";
+import { WiStrongWind } from "react-icons/wi";
+import WeatherClothesAdvisor from "./WeatherClothesAdvisor";
 
 interface BasicFullInfoProps {
 
@@ -54,7 +55,7 @@ const BasicFullInfo: FunctionComponent<BasicFullInfoProps> = () => {
                 <Skeleton width={200} height={30} />
                 <Skeleton width={120} height={20} />
                 <Skeleton circle width={150} height={150}
-                    baseColor="transparent"   
+                    baseColor="transparent"
                     highlightColor="transparent"
                     className="border-4 border-white rounded-md" />
                 <Skeleton width={100} height={40} />
@@ -78,10 +79,10 @@ const BasicFullInfo: FunctionComponent<BasicFullInfoProps> = () => {
                 {temperature}°
             </div>
             <div className="flex gap-2 items-center text-2xl">
-                <WiStrongWind size={50}/> {wind} km/h
+                <WiStrongWind size={50} /> {wind} km/h
             </div>
 
-
+            <WeatherClothesAdvisor temperature={temperature} weatherCode={weathercode} wind={wind} />
 
 
         </div>

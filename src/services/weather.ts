@@ -12,17 +12,27 @@ export async function get7DayForecast(lat: number, lon: number): Promise<IShortI
     });
     const daily = res.data.daily;
 
-    return daily.time.map((t: string, i: number) => ({
-        date: new Date(t).toLocaleDateString("en-US", {
-            weekday: "short",
-            day: "numeric",
-            month: "short",
-        }),
-        min: Math.round(daily.temperature_2m_min[i]),
-        max: Math.round(daily.temperature_2m_max[i]),
-        weatherCode: daily.weathercode[i],
-        wind: Math.round(daily.windspeed_10m_max[i]),
-    }));
+    return daily.time.map((t: string, i: number) => {
+        const dateObj = new Date(t);
+
+        const hours = String(dateObj.getHours()).padStart(2, "0");
+        const minutes = String(dateObj.getMinutes()).padStart(2, "0");
+
+        return {
+            date: dateObj.toLocaleDateString("en-US", {
+                weekday: "short",
+                day: "numeric",
+                month: "short",
+            }),
+
+            min: Math.round(daily.temperature_2m_min[i]),
+            max: Math.round(daily.temperature_2m_max[i]),
+            weatherCode: daily.weathercode[i],
+            wind: Math.round(daily.windspeed_10m_max[i]),
+            time: `${hours}:${minutes}`,            // HH:MM
+            fullDate: t.slice(0, 10),
+        }
+    });
 };
 
 
@@ -52,7 +62,7 @@ interface IWeatherOptions {
     hour?: string; // HH:MM, 
 }
 
-export async function getCurrentWeatherFull ({
+export async function getCurrentWeatherFull({
     lat,
     lon,
     date,
@@ -76,7 +86,7 @@ export async function getCurrentWeatherFull ({
             longitude: lon,
             current_weather: !useHourly, // true якщо поточна погода
             hourly: useHourly
-                ? "temperature_2m,weathercode,relativehumidity_2m,precipitation,cloudcover,windspeed_10m"
+                ? "temperature_2m,weathercode,relativehumidity_2m,precipitation,cloudcover,windspeed_10m,is_day"
                 : "relativehumidity_2m,precipitation,cloudcover",
             start_date: useHourly ? date : undefined,
             end_date: useHourly ? date : undefined,
@@ -94,7 +104,12 @@ export async function getCurrentWeatherFull ({
 
     if (useHourly) {
         const targetTime = `${date}T${hour}`;
-        const idx = res.data.hourly.time.findIndex((t: string) => t[11] === targetTime[11] && t[12] === targetTime[12]);
+        const idx = res.data.hourly.time.findIndex((t: string) => {
+            if (!targetTime) return false;
+            // обрізаємо до хвилин
+            return t.slice(0, 16) === targetTime; // YYYY-MM-DDTHH:MM
+        });
+        debugger
         if (idx === -1) throw new Error("Time not found in hourly forecast");
 
         return {
@@ -111,8 +126,8 @@ export async function getCurrentWeatherFull ({
         };
     } else {
         const current = res.data.current_weather
-        
-        
+
+
         const splitedTime = res.data.current_weather.time.split('T');
         const nowDate = splitedTime[0]
         const nowTime = splitedTime[1]
@@ -127,7 +142,7 @@ export async function getCurrentWeatherFull ({
             relativehumidity: res.data.hourly.relativehumidity_2m[idx],
             cloudcover: res.data.hourly.cloudcover[idx],
             city: cityName,
-            is_day: current.is_day === 1, 
+            is_day: current.is_day === 1,
         };
     }
 }
@@ -141,7 +156,7 @@ export async function getHourlyForecast(
         params: {
             latitude: lat,
             longitude: lon,
-            hourly: "temperature_2m,weathercode,is_day",
+            hourly: "temperature_2m,weathercode,is_day,windspeed_10m",
             start_date: date,
             end_date: date,
             timezone: "auto",
@@ -154,6 +169,7 @@ export async function getHourlyForecast(
         time: t,
         temperature: hourly.temperature_2m[idx],
         weathercode: hourly.weathercode[idx],
-        is_day: hourly.is_day[idx]
+        is_day: hourly.is_day[idx],
+        wind: hourly.windspeed_10m[idx]
     }));
 }

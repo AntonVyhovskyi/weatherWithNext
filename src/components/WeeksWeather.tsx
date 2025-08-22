@@ -1,21 +1,34 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/hooksForStores";
 import { fetchWeeksWeatherThunk } from "@/store/slices/weather7Days.slice";
 import { FunctionComponent, useEffect } from "react";
+import WeatherIcon from "./WeatherIcon";
+import { fetchFullInfoWeatherForOneDayThunk } from "@/store/slices/weathersBasicInfo.slice";
 
 interface WeeksWeatherProps {
 
 }
 
 const WeeksWeather: FunctionComponent<WeeksWeatherProps> = () => {
+    const {lat, lon} = useAppSelector(s=>s.fullInfoFurDay.coordinates)
     const dispatch = useAppDispatch();
     const { weather, loading, error } = useAppSelector((state) => state.weatherForWeek);
     useEffect(()=>{
-        dispatch(fetchWeeksWeatherThunk({ lat: 50.45, lon: 30.52 }))
-    },[])
+        dispatch(fetchWeeksWeatherThunk({ lat, lon}))
+    },[lat, lon]) 
+    const changeDayHandler = ({ lt, ln, date, hour }: { lt: number; ln: number; date: string; hour: string }) => {
+        dispatch(fetchFullInfoWeatherForOneDayThunk({lat: lt, lon: ln, date, hour}))
+    }
     return (
-        <div>
+        <div className="w-full flex flex-col gap-5 pt-12">
             {weather.map((el)=>(
-                <div key={el.date}>{el.date}</div>
+                <div onClick={()=>{changeDayHandler({lt: lat, ln: lon, date: el.fullDate, hour: '14:00'})}} 
+                className="w-full p-3 rounded-xl border-2 border-amber-50 text-amber-50 flex items-center justify-between bg-black/5 hover:bg-black/30 transition-colors duration-300 cursor-pointer"
+                 key={el.date} >
+                    <div>{el.date}</div>
+                    <div>{el.min}/{el.max}</div>
+                    <WeatherIcon  size={30} is_day={true} code={el.weatherCode}/>
+                    <div>{el.wind}</div>
+                    </div>
             ))}
         </div>
     );

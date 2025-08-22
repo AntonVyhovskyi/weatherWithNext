@@ -1,7 +1,7 @@
 import { getCurrentWeatherFull } from "@/services/weather";
 import { IFullBasicInfoWeatherForOneDay } from "@/shared/types/weather.interfaces";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { error } from "node:console";
+
 
 interface IFullInfo {
     loading: boolean;
@@ -36,9 +36,16 @@ const initialState: IFullInfo = {
 
 export const fetchFullInfoWeatherForOneDayThunk = createAsyncThunk(
     "weather/fetchWeather",
-    async ({ lat, lon }: { lat: number; lon: number }) => {
-        
-        const today = await getCurrentWeatherFull({lat, lon});
+    async ({ lat, lon, date, hour }: { lat: number; lon: number; date?: string; hour?: string }) => {
+        let today
+        if (hour && date) {
+            debugger
+             today = await getCurrentWeatherFull({ lat, lon, date, hour});
+             
+        } else {
+            today = await getCurrentWeatherFull({ lat, lon});
+        }
+
 
         return { today };
     }
@@ -50,6 +57,10 @@ const weatherSlice = createSlice({
     reducers: {
         setCoordinates(state, action: PayloadAction<{ lat: number; lon: number }>) {
             state.coordinates = action.payload;
+        },
+        setTimeFurBasicInfo(state, action: PayloadAction<{ time: string; wind: number, weathercode: number, is_day: boolean, temperature: number }>) {
+            const {time, wind, weathercode, is_day, temperature} = action.payload
+            state.weather = {...state.weather, time, wind, weathercode, is_day, temperature}
         }
     },
     extraReducers: (builder) => {
@@ -60,7 +71,7 @@ const weatherSlice = createSlice({
             })
             .addCase(fetchFullInfoWeatherForOneDayThunk.fulfilled, (state, action) => {
                 state.loading = false;
-               
+
                 state.weather = action.payload.today;
             })
             .addCase(fetchFullInfoWeatherForOneDayThunk.rejected, (state, action) => {
@@ -71,5 +82,5 @@ const weatherSlice = createSlice({
 });
 
 
-export const { setCoordinates } = weatherSlice.actions;
+export const { setCoordinates, setTimeFurBasicInfo } = weatherSlice.actions;
 export default weatherSlice.reducer;

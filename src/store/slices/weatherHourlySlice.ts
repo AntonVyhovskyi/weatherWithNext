@@ -9,7 +9,7 @@ interface IHourlyWeatherState {
 }
 
 const initialState: IHourlyWeatherState = {
-    loading: false,
+    loading: true,
     error: null,
     items: [],
 };

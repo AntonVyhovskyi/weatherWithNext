@@ -30,7 +30,7 @@ export default function Home() {
   }, [])
   
   return (
-    <div className={`min-h-screen ${is_day ? backgroundsConst[weathercode] : backgroundsNightConst[weathercode]}`}>
+    <div className={` pb-10 min-h-screen ${is_day ? backgroundsConst[weathercode] : backgroundsNightConst[weathercode]}`}>
       <div className="p-2 border-2 border-amber-50 rounded-full hover:bg-amber-50/20 cursor-pointer transition-colors duration-300 absolute right-5 top-5" onClick={()=>setisSearch(true)}><FiSearch size={16} color='white'/></div>
       {isSearch && <SearchCity close={setisSearch}/>}
       <div className="max-w-[1000px] min-w-[320px] mx-auto pt-25 px-10">

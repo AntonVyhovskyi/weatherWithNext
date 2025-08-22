@@ -16,7 +16,8 @@ const initialState: WeatherState = {
 
 export const fetchWeeksWeatherThunk = createAsyncThunk(
     "weather/fetchForecast",
-    async ({ lat, lon }: { lat: number; lon: number }) => {
+    async ({ lat, lon }: { lat: number; lon: number;}) => {
+        
         return await get7DayForecast(lat, lon);
     }
 )

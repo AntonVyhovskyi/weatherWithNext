@@ -4,6 +4,8 @@ export interface IShortInfoAboutOneDay {
   max: number;
   weatherCode: number;
   wind: number;
+  time: string;
+  fullDate: string
 }
 
 
@@ -31,5 +33,6 @@ export interface IHourlyForecastItem {
   time: string;        
   temperature: number;
   weathercode: number; 
-  is_day: boolean
+  is_day: boolean;
+  wind: number;
 }
