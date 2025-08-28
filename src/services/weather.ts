@@ -102,7 +102,7 @@ export async function getCurrentWeatherFull({
             cityRes.data?.address?.city ||
             cityRes.data?.address?.town ||
             cityRes.data?.address?.village ||
-            "Unknown";
+            "Your City)";
     } catch {
         // Якщо reverse API падає — просто залишаємо cityName = "Unknown"
     }
