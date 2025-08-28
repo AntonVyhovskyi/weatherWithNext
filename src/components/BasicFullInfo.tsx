@@ -15,7 +15,7 @@ const BasicFullInfo: FunctionComponent = () => {
 
     const {
         loading,
-        error,
+       
         coordinates: {
             lat,
             lon
@@ -58,9 +58,7 @@ const BasicFullInfo: FunctionComponent = () => {
         );
     }
 
-    if (error) {
-        return <div className="text-red-400">⚠️ {error}</div>;
-    }
+   
 
     return (
         <div className="text-white flex flex-col gap-3 items-center">
