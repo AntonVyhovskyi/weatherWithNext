@@ -16,10 +16,6 @@ export async function GET(req: Request) {
         });
         return NextResponse.json(response.data);
     } catch (err: unknown) {
-        if (err instanceof AxiosError) {
-            return NextResponse.json({
-                error: err.response?.data || err.message
-            }, { status: err.response?.status || 500 });
-        }
+        return NextResponse.json({ lat, lon });
     }
 }

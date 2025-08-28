@@ -95,12 +95,17 @@ export async function getCurrentWeatherFull({
     });
 
     // 2️⃣ Реверсна геокодировка через Nominatim
-    const cityRes = await axios.get(`/api/reverse?lat=${lat}&lon=${lon}`);
-    const cityName =
-        cityRes.data.address.city ||
-        cityRes.data.address.town ||
-        cityRes.data.address.village ||
-        "Unknown";
+     let cityName = "Your City)";
+    try {
+        const cityRes = await axios.get(`/api/reverse?lat=${lat}&lon=${lon}`);
+        cityName =
+            cityRes.data?.address?.city ||
+            cityRes.data?.address?.town ||
+            cityRes.data?.address?.village ||
+            "Unknown";
+    } catch {
+        // Якщо reverse API падає — просто залишаємо cityName = "Unknown"
+    }
 
     if (useHourly) {
         const targetTime = `${date}T${hour}`;
